@@ -1,17 +1,17 @@
 export type Platform = "chatgpt" | "claude" | "gemini" | "perplexity" | "grok" | "meta" | "copilot";
 
 export type Category =
-  | "marketing"
-  | "business-strategy"
+  | "career"
+  | "academic-writing"
+  | "research"
+  | "interview-prep"
   | "development"
   | "design"
-  | "hr"
-  | "finance"
-  | "sales"
-  | "legal"
+  | "business-strategy"
   | "content-creation"
   | "education"
-  | "data-analysis";
+  | "data-analysis"
+  | "productivity";
 
 export type Complexity = "beginner" | "intermediate" | "advanced";
 
@@ -53,31 +53,31 @@ export const PLATFORM_LABELS: Record<Platform, string> = {
 };
 
 export const CATEGORY_LABELS: Record<Category, string> = {
-  marketing: "Marketing",
-  "business-strategy": "Business Strategy",
+  career: "Career & Jobs",
+  "academic-writing": "Academic Writing",
+  research: "Research",
+  "interview-prep": "Interview Prep",
   development: "Development",
   design: "Design",
-  hr: "Human Resources",
-  finance: "Finance",
-  sales: "Sales",
-  legal: "Legal",
+  "business-strategy": "Business Strategy",
   "content-creation": "Content Creation",
-  education: "Education",
+  education: "Study & Learning",
   "data-analysis": "Data Analysis",
+  productivity: "Productivity",
 };
 
 export const CATEGORY_ICONS: Record<Category, string> = {
-  marketing: "Megaphone",
-  "business-strategy": "Briefcase",
+  career: "Briefcase",
+  "academic-writing": "FileText",
+  research: "BookOpen",
+  "interview-prep": "MessageSquare",
   development: "Code2",
   design: "Palette",
-  hr: "Users",
-  finance: "DollarSign",
-  sales: "TrendingUp",
-  legal: "Scale",
+  "business-strategy": "TrendingUp",
   "content-creation": "PenLine",
   education: "GraduationCap",
   "data-analysis": "BarChart3",
+  productivity: "Clock",
 };
 
 export const COMPLEXITY_COLORS: Record<Complexity, string> = {
