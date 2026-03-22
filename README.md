@@ -1,5 +1,3 @@
-# AI Prompt Builder
-
 A website that helps users create optimized prompts for different AI tools in seconds.  
 Instead of guessing how to phrase prompts, this platform guides users with templates, structure, and suggestions designed for modern AI models.
 
@@ -48,9 +46,9 @@ This project is designed to generate prompts for tools such as:
 Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/ai-prompt-builder.git
+git clone https://github.com/arpit-mech/ai-prompt-builder.git
 👨‍💻 Author
 
-Created by Your Name
+Created by arpita-mech
 
 If you like this project, consider giving it a ⭐ on GitHub.
