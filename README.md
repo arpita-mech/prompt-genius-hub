@@ -24,3 +24,33 @@ This project is designed to generate prompts for tools such as:
 - Other AI platforms
 
 ## 📦 Project Structure
+│
+├── public/ # Static files
+├── src/ # Main source code
+│ ├── components/ # UI components
+│ ├── pages/ # Website pages
+│ ├── utils/ # Prompt logic and helpers
+│ └── styles/ # CSS / styling
+│
+├── package.json
+└── README.md
+
+
+## ⚙️ How It Works
+
+1. User selects the AI tool they want to use
+2. The website asks structured questions
+3. Inputs are combined into an optimized prompt
+4. The generated prompt can be copied and used directly in the AI tool
+
+## 🛠️ Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/yourusername/ai-prompt-builder.git
+👨‍💻 Author
+
+Created by Your Name
+
+If you like this project, consider giving it a ⭐ on GitHub.
