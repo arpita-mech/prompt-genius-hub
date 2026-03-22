@@ -11,8 +11,7 @@ export type Category =
   | "legal"
   | "content-creation"
   | "education"
-  | "data-analysis"
-  | "career";
+  | "data-analysis";
 
 export type Complexity = "beginner" | "intermediate" | "advanced";
 
@@ -65,7 +64,6 @@ export const CATEGORY_LABELS: Record<Category, string> = {
   "content-creation": "Content Creation",
   education: "Education",
   "data-analysis": "Data Analysis",
-  career: "Career & Student",
 };
 
 export const CATEGORY_ICONS: Record<Category, string> = {
@@ -80,7 +78,6 @@ export const CATEGORY_ICONS: Record<Category, string> = {
   "content-creation": "PenLine",
   education: "GraduationCap",
   "data-analysis": "BarChart3",
-  career: "UserCheck",
 };
 
 export const COMPLEXITY_COLORS: Record<Complexity, string> = {

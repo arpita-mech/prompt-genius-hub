@@ -36,18 +36,9 @@ export default function PromptDetail() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const currentIndex = prompts.findIndex((p) => p.slug === slug);
-  const prevPrompt = currentIndex > 0 ? prompts[currentIndex - 1] : null;
-  const nextPrompt = currentIndex < prompts.length - 1 ? prompts[currentIndex + 1] : null;
-
   const relatedPrompts = prompt.relatedPromptIds
     ?.map((id) => prompts.find((p) => p.id === id))
     .filter(Boolean) ?? [];
-
-  const relatedIds = new Set([prompt.id, ...(prompt.relatedPromptIds ?? [])]);
-  const moreFromCategory = prompts
-    .filter((p) => p.category === prompt.category && !relatedIds.has(p.id))
-    .slice(0, 4);
 
   return (
     <div ref={topRef} className="min-h-screen bg-background">
@@ -200,61 +191,6 @@ export default function PromptDetail() {
               </div>
             </div>
           )}
-
-          {/* More from this category */}
-          {moreFromCategory.length > 0 && (
-            <div className="border-t border-border pt-8">
-              <h3 className="text-lg font-semibold mb-4">More in {CATEGORY_LABELS[prompt.category]}</h3>
-              <div className="grid gap-3 sm:grid-cols-2">
-                {moreFromCategory.map((mp) => (
-                  <Link
-                    key={mp.id}
-                    to={`/prompt/${mp.slug}`}
-                    className="group flex items-center gap-4 p-4 rounded-lg border border-border bg-card hover:shadow-md transition-shadow"
-                  >
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-medium text-sm mb-1 group-hover:text-primary transition-colors truncate">{mp.title}</h4>
-                      <p className="text-xs text-muted-foreground line-clamp-1">{mp.description}</p>
-                    </div>
-                    <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary shrink-0 transition-colors" />
-                  </Link>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Prev / Next navigation */}
-          <div className="border-t border-border pt-8 grid grid-cols-2 gap-4">
-            {prevPrompt ? (
-              <Link
-                to={`/prompt/${prevPrompt.slug}`}
-                className="group p-4 rounded-lg border border-border bg-card hover:shadow-md transition-shadow"
-              >
-                <span className="text-xs text-muted-foreground flex items-center gap-1 mb-1">
-                  <ArrowLeft className="w-3 h-3" /> Previous
-                </span>
-                <span className="text-sm font-medium group-hover:text-primary transition-colors line-clamp-1">{prevPrompt.title}</span>
-              </Link>
-            ) : <div />}
-            {nextPrompt ? (
-              <Link
-                to={`/prompt/${nextPrompt.slug}`}
-                className="group p-4 rounded-lg border border-border bg-card hover:shadow-md transition-shadow text-right"
-              >
-                <span className="text-xs text-muted-foreground flex items-center gap-1 mb-1 justify-end">
-                  Next <ArrowRight className="w-3 h-3" />
-                </span>
-                <span className="text-sm font-medium group-hover:text-primary transition-colors line-clamp-1">{nextPrompt.title}</span>
-              </Link>
-            ) : <div />}
-          </div>
-
-          {/* Back to library */}
-          <div className="pt-6 pb-4 text-center">
-            <Link to="/" className="text-sm text-primary hover:underline font-medium">
-              ← Browse all {prompts.length} prompts
-            </Link>
-          </div>
         </div>
       </div>
 
