@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import { prompts } from "@/lib/prompts-data";
-import { Category, Platform, CATEGORY_LABELS, PLATFORM_LABELS } from "@/lib/types";
+import { Category, Platform, Complexity, CATEGORY_LABELS, PLATFORM_LABELS, COMPLEXITY_COLORS } from "@/lib/types";
 import { PromptCard } from "./PromptCard";
 
 interface LibrarySectionProps {
@@ -12,11 +12,13 @@ interface LibrarySectionProps {
 
 const ALL_CATEGORIES = Object.keys(CATEGORY_LABELS) as Category[];
 const ALL_PLATFORMS = Object.keys(PLATFORM_LABELS) as Platform[];
+const ALL_COMPLEXITIES: Complexity[] = ["beginner", "intermediate", "advanced"];
 
 export function LibrarySection({ favorites, onToggleFavorite, showOnlyFavorites = false }: LibrarySectionProps) {
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<Category | "all">("all");
   const [selectedPlatform, setSelectedPlatform] = useState<Platform | "all">("all");
+  const [selectedComplexity, setSelectedComplexity] = useState<Complexity | "all">("all");
   const [showFilters, setShowFilters] = useState(false);
 
   const filtered = useMemo(() => {
@@ -28,7 +30,9 @@ export function LibrarySection({ favorites, onToggleFavorite, showOnlyFavorites 
         (p) =>
           p.title.toLowerCase().includes(q) ||
           p.description.toLowerCase().includes(q) ||
-          p.tags.some((t) => t.toLowerCase().includes(q))
+          p.tags.some((t) => t.toLowerCase().includes(q)) ||
+          p.subcategory?.toLowerCase().includes(q) ||
+          CATEGORY_LABELS[p.category].toLowerCase().includes(q)
       );
     }
     if (selectedCategory !== "all") {
@@ -37,8 +41,13 @@ export function LibrarySection({ favorites, onToggleFavorite, showOnlyFavorites 
     if (selectedPlatform !== "all") {
       result = result.filter((p) => p.platforms.includes(selectedPlatform));
     }
+    if (selectedComplexity !== "all") {
+      result = result.filter((p) => p.complexity === selectedComplexity);
+    }
     return result;
-  }, [search, selectedCategory, selectedPlatform, favorites, showOnlyFavorites]);
+  }, [search, selectedCategory, selectedPlatform, selectedComplexity, favorites, showOnlyFavorites]);
+
+  const activeFilterCount = [selectedCategory !== "all", selectedPlatform !== "all", selectedComplexity !== "all"].filter(Boolean).length;
 
   return (
     <section className="py-16 md:py-20">
@@ -50,7 +59,7 @@ export function LibrarySection({ favorites, onToggleFavorite, showOnlyFavorites 
           <p className="text-muted-foreground">
             {showOnlyFavorites
               ? `${filtered.length} saved prompt${filtered.length !== 1 ? "s" : ""}`
-              : "Browse, preview, and copy prompts for any AI platform"}
+              : `${prompts.length} professional prompts — browse, preview, and copy for any AI platform`}
           </p>
         </div>
 
@@ -60,7 +69,7 @@ export function LibrarySection({ favorites, onToggleFavorite, showOnlyFavorites 
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input
               type="text"
-              placeholder="Search prompts by title, tag, or keyword..."
+              placeholder="Search by title, category, tag, or keyword..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-input bg-card text-sm focus:outline-none focus:ring-2 focus:ring-ring/30 transition-shadow"
@@ -74,11 +83,11 @@ export function LibrarySection({ favorites, onToggleFavorite, showOnlyFavorites 
           <button
             onClick={() => setShowFilters(!showFilters)}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-lg border text-sm font-medium transition-colors active:scale-[0.97] ${
-              showFilters ? "bg-primary text-primary-foreground border-primary" : "border-input bg-card text-foreground hover:bg-muted"
+              showFilters || activeFilterCount > 0 ? "bg-primary text-primary-foreground border-primary" : "border-input bg-card text-foreground hover:bg-muted"
             }`}
           >
             <SlidersHorizontal className="w-4 h-4" />
-            Filters
+            Filters{activeFilterCount > 0 && ` (${activeFilterCount})`}
           </button>
         </div>
 
@@ -107,6 +116,28 @@ export function LibrarySection({ favorites, onToggleFavorite, showOnlyFavorites 
                 ))}
               </div>
             </div>
+            <div>
+              <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 block">Difficulty</label>
+              <div className="flex flex-wrap gap-1.5">
+                <FilterChip active={selectedComplexity === "all"} onClick={() => setSelectedComplexity("all")}>All</FilterChip>
+                {ALL_COMPLEXITIES.map((c) => (
+                  <FilterChip key={c} active={selectedComplexity === c} onClick={() => setSelectedComplexity(c)}>
+                    <span className={`inline-block w-2 h-2 rounded-full mr-1.5 ${
+                      c === "beginner" ? "bg-emerald-500" : c === "intermediate" ? "bg-amber-500" : "bg-rose-500"
+                    }`} />
+                    {c.charAt(0).toUpperCase() + c.slice(1)}
+                  </FilterChip>
+                ))}
+              </div>
+            </div>
+            {activeFilterCount > 0 && (
+              <button
+                onClick={() => { setSelectedCategory("all"); setSelectedPlatform("all"); setSelectedComplexity("all"); }}
+                className="text-xs text-primary font-medium hover:underline"
+              >
+                Clear all filters
+              </button>
+            )}
           </div>
         )}
 
@@ -114,7 +145,7 @@ export function LibrarySection({ favorites, onToggleFavorite, showOnlyFavorites 
         {filtered.length === 0 ? (
           <div className="text-center py-16">
             <p className="text-muted-foreground mb-2">No prompts found</p>
-            <button onClick={() => { setSearch(""); setSelectedCategory("all"); setSelectedPlatform("all"); }} className="text-sm text-primary font-medium hover:underline">
+            <button onClick={() => { setSearch(""); setSelectedCategory("all"); setSelectedPlatform("all"); setSelectedComplexity("all"); }} className="text-sm text-primary font-medium hover:underline">
               Clear filters
             </button>
           </div>
@@ -140,7 +171,7 @@ function FilterChip({ children, active, onClick }: { children: React.ReactNode; 
   return (
     <button
       onClick={onClick}
-      className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors active:scale-[0.96] ${
+      className={`flex items-center px-3 py-1.5 rounded-md text-xs font-medium transition-colors active:scale-[0.96] ${
         active ? "bg-primary text-primary-foreground" : "bg-card border border-border text-foreground hover:bg-muted"
       }`}
     >

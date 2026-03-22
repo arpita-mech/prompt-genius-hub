@@ -1,17 +1,19 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Sparkles, ArrowDown } from "lucide-react";
+import { prompts } from "@/lib/prompts-data";
+import { CATEGORY_LABELS } from "@/lib/types";
+
+const categoryCount = new Set(prompts.map((p) => p.category)).size;
 
 export function HeroSection({ onExplore }: { onExplore: () => void }) {
   const [visible, setVisible] = useState(false);
-  const ref = useRef<HTMLElement>(null);
 
   useEffect(() => {
     setVisible(true);
   }, []);
 
   return (
-    <section ref={ref} className="relative overflow-hidden py-24 md:py-32 lg:py-40">
-      {/* Subtle background pattern */}
+    <section className="relative overflow-hidden py-24 md:py-32 lg:py-40">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,hsl(var(--primary)/0.06),transparent_50%),radial-gradient(circle_at_70%_60%,hsl(var(--accent)/0.05),transparent_50%)]" />
 
       <div className="container relative">
@@ -22,7 +24,7 @@ export function HeroSection({ onExplore }: { onExplore: () => void }) {
             }`}
           >
             <Sparkles className="w-3.5 h-3.5" />
-            16 curated prompts across 7 categories
+            {prompts.length} free prompts across {categoryCount} categories
           </div>
 
           <h1
@@ -31,8 +33,8 @@ export function HeroSection({ onExplore }: { onExplore: () => void }) {
             }`}
             style={{ animationDelay: "80ms" }}
           >
-            Craft better prompts,{" "}
-            <span className="text-primary">get better results</span>
+            Professional AI prompts,{" "}
+            <span className="text-primary">completely free</span>
           </h1>
 
           <p
@@ -41,7 +43,7 @@ export function HeroSection({ onExplore }: { onExplore: () => void }) {
             }`}
             style={{ animationDelay: "160ms" }}
           >
-            A curated library and generator for AI prompts across ChatGPT, Claude, Gemini, and more. Find the right prompt, customize it, and copy.
+            Comprehensive, ready-to-use prompt templates for ChatGPT, Claude, Gemini, and more. No signup required. No paywalls. Just copy and use.
           </p>
 
           <div
@@ -54,13 +56,13 @@ export function HeroSection({ onExplore }: { onExplore: () => void }) {
               onClick={onExplore}
               className="px-6 py-3 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:opacity-90 transition-opacity active:scale-[0.97] shadow-sm"
             >
-              Browse Library
+              Browse All Prompts
             </button>
             <button
               onClick={onExplore}
               className="px-6 py-3 rounded-lg bg-card border border-border text-foreground font-medium text-sm hover:bg-muted transition-colors active:scale-[0.97]"
             >
-              Generate Prompt
+              Build a Prompt
             </button>
           </div>
 
