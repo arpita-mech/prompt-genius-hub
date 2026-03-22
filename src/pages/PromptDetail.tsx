@@ -36,9 +36,18 @@ export default function PromptDetail() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const currentIndex = prompts.findIndex((p) => p.slug === slug);
+  const prevPrompt = currentIndex > 0 ? prompts[currentIndex - 1] : null;
+  const nextPrompt = currentIndex < prompts.length - 1 ? prompts[currentIndex + 1] : null;
+
   const relatedPrompts = prompt.relatedPromptIds
     ?.map((id) => prompts.find((p) => p.id === id))
     .filter(Boolean) ?? [];
+
+  const relatedIds = new Set([prompt.id, ...(prompt.relatedPromptIds ?? [])]);
+  const moreFromCategory = prompts
+    .filter((p) => p.category === prompt.category && !relatedIds.has(p.id))
+    .slice(0, 4);
 
   return (
     <div ref={topRef} className="min-h-screen bg-background">
